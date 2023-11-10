@@ -1,0 +1,23 @@
+﻿@{
+    Layout = "Layout.cshtml";
+}
+
+
+<div class="content">
+    <!-- Your main content goes here -->
+    <h1>Welcome to the Admin Dashboard</h1>
+    <p>This is where you can add your dashboard content.</p>
+</div>
+
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        let Menulist = document.querySelectorAll(".Menulist li");
+        Menulist.forEach((item) => item.classList.remove("active"));
+        const liElement = document.querySelector(".User");
+        liElement.classList.toggle("active");
+    });
+
+</script>

@@ -1,0 +1,16 @@
+﻿@{
+    Layout = "Layout.cshtml";
+}
+
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        let Menulist = document.querySelectorAll(".Menulist li");
+        Menulist.forEach((item) => item.classList.remove("active"));
+        const liElement = document.querySelector(".Home");
+        liElement.classList.toggle("active");
+    });
+
+</script>

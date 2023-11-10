@@ -1,0 +1,191 @@
+﻿@model Matcher.Models.UserRegisterModel
+@{
+    Layout = null;
+    var error = ViewBag.error;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign Up Form by Colorlib</title>
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
+    <!-- Main css -->
+    <link rel="stylesheet" href="~/css/login.css">
+    <style>
+        .form-group select {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+            .form-group select option {
+                font-size: 14px;
+            }
+    </style>
+</head>
+<body>
+    <div class="main">
+
+        <section class="signup">
+            <div class="container">
+                <div class="signup-content">
+                    <div class="signup-form">
+                        <h2 class="form-title">Sign up</h2>
+                        <form method="POST" class="register-form" id="register-form" asp-controller="Users" asp-action="Register">
+                            <div class="form-group">
+                                <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                Name: <input type="text" name="name" id="name" placeholder="Your Name" />
+                                <span id="name-error" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="DateOfBirth"><i class="zmdi zmdi-lock"></i></label>
+                                Day Of Birth:<input type="datetime-local" name="DateOfBirth" id="DateOfBirth" placeholder="DateOfBirth" />
+                                <span id="date-of-birth-error" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="Gender"><i class="zmdi zmdi-lock"></i></label>
+                                Gender:
+                                <select id="Gender" name="Gender">
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <span id="gender-error" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="Location"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                Location:<input type="text" name="Location" id="Location" placeholder="Location" />
+                                <span id="location-error" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="email"><i class="zmdi zmdi-email"></i></label>
+                                Email:<input type="email" name="email" id="email" placeholder="Your Email" />
+                                <span id="email-error" class="text-danger mt-2 px-4">@error</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="pass"><i class="zmdi zmdi-lock"></i></label>
+                                Password:<input type="password" name="pass" id="pass" placeholder="Password" />
+                                <span id="pass-error" class="text-danger mt-2 px-4"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
+                                Confirm password:<input type="password" name="re_pass" id="re_pass" placeholder="Repeat your password"/>
+                                <span id="re-pass-error" class="text-danger mt-2 px-4"></span>
+                            </div>
+                            <div class="form-group">
+                                <input type="checkbox" id="agree-term" class="agree-term" />
+                                <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in <a href="#" class="term-service">Terms of service</a></label>
+                                <span id="agree-term-error" class="text-danger"></span>
+                            </div>
+                            <div class="form-group form-button">
+                                <input type="submit" name="signup" id="signup" class="form-submit" value="Register" />
+                            </div>
+                        </form>
+                    </div>
+                    <div class="signup-image">
+                        <figure><img src="~/images/signup-image.jpg" alt="sing up image"></figure>
+                        <a class="nav-link text-white" asp-controller="Users" asp-action="Login">I am already member</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- JS -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.getElementById("register-form").addEventListener("submit", function (event) {
+            // Lấy giá trị của các trường
+            var nameValue = document.getElementById("name").value;
+            var dateOfBirthValue = document.getElementById("DateOfBirth").value;
+            var genderValue = document.getElementById("Gender").value;
+            var locationValue = document.getElementById("Location").value;
+            var emailValue = document.getElementById("email").value;
+            var passwordValue = document.getElementById("pass").value;
+            var rePasswordValue = document.getElementById("re_pass").value;
+            var agreeTermChecked = document.getElementById("agree-term").checked;
+
+            // Lấy phần tử span để hiển thị thông báo lỗi
+            var nameErrorSpan = document.getElementById("name-error");
+            var dateOfBirthErrorSpan = document.getElementById("date-of-birth-error");
+            var genderErrorSpan = document.getElementById("gender-error");
+            var locationErrorSpan = document.getElementById("location-error");
+            var emailErrorSpan = document.getElementById("email-error");
+            var passwordErrorSpan = document.getElementById("pass-error");
+            var rePasswordErrorSpan = document.getElementById("re-pass-error");
+            var agreeTermErrorSpan = document.getElementById("agree-term-error");
+
+            // Hiển thị thông báo lỗi nếu có trường trống
+            if (nameValue.trim() === "") {
+                nameErrorSpan.textContent = "Please enter your name.";
+                event.preventDefault();
+            } else {
+                nameErrorSpan.textContent = "";
+            }
+
+            if (dateOfBirthValue.trim() === "") {
+                dateOfBirthErrorSpan.textContent = "Please enter your date of birth.";
+                event.preventDefault();
+            } else {
+                dateOfBirthErrorSpan.textContent = "";
+            }
+
+            if (genderValue.trim() === "") {
+                genderErrorSpan.textContent = "Please select your gender.";
+                event.preventDefault();
+            } else {
+                genderErrorSpan.textContent = "";
+            }
+
+            if (locationValue.trim() === "") {
+                locationErrorSpan.textContent = "Please enter your location.";
+                event.preventDefault();
+            } else {
+                locationErrorSpan.textContent = "";
+            }
+
+            if (emailValue.trim() === "") {
+                emailErrorSpan.textContent = "Please enter your email.";
+                event.preventDefault();
+            } else {
+                emailErrorSpan.textContent = "";
+            }
+
+            if (passwordValue.trim() === "") {
+                passwordErrorSpan.textContent = "Please enter your password.";
+                event.preventDefault();
+            } else {
+                passwordErrorSpan.textContent = "";
+            }
+
+            if (rePasswordValue.trim() === "") {
+                rePasswordErrorSpan.textContent = "Please enter your password again.";
+                event.preventDefault();
+            } else {
+                rePasswordErrorSpan.textContent = "";
+            }
+
+            if (!agreeTermChecked) {
+                agreeTermErrorSpan.textContent = "Please agree to the terms.";
+                event.preventDefault();
+            } else {
+                agreeTermErrorSpan.textContent = "";
+            }
+
+            // Kiểm tra xem mật khẩu và mật khẩu nhập lại có khớp nhau không
+            if (passwordValue !== rePasswordValue) {
+                passwordErrorSpan.textContent = "Passwords do not match. Please enter again.";
+                rePasswordErrorSpan.textContent = "Passwords do not match. Please enter again.";
+                event.preventDefault();
+            }
+        });
+    </script>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>
+
