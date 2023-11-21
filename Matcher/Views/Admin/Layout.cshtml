@@ -5,83 +5,79 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="~/css/admin/style.css" />
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <title>Admin Dashboard</title>
 </head>
 <body>
-    <nav>
-        <div class="menuToggle"></div>
-        <div class="sidebar">
-            <ul>
-                <li class="logo" style="--bg: #333">
+    <div>
+        <nav>
+            <div class="menuToggle"></div>
+            <div class="sidebar">
+                <ul>
+                    <li class="logo" style="--bg: #333">
+                        <a href="#">
+                            <div class="icon">
+                                <img src="~/images/icon.jpg" style="border-radius: 75px;width: 60px;height: 40px;" />
+                            </div>
+                            <div class="text">Matcher</div>
+                        </a>
+                    </li>
+                    <div class="Menulist">
+                    <li class="Home" style="--bg: #f44336" class="active">
+                        <a href="/Admin">
+                            <div class="icon"><ion-icon name="home-outline"></ion-icon></div>
+                            <div class="text">Home</div>
+                        </a>
+                    </li>
+                    <li class="User" style="--bg: #ffa117">
+                        <a href="/Admin/User">
+                            <div class="icon">
+                                <ion-icon name="person-outline"></ion-icon>
+                            </div>
+                            <div class="text">User</div>
+                        </a>
+                    </li>
+                    <li class="UpgradeHistory" style="--bg: #b145e9">
+                        <a href="/Admin/UpgradeHistory">
+                            <div class="icon"><ion-icon name="cart-outline"></ion-icon></div>
+                            <div class="text">Upgrade History</div>
+                        </a>
+                    </li>
+                    <li class="Settings" style="--bg: #e91e63">
+                        <a href="/Admin/Settings">
+                            <div class="icon">
+                                <ion-icon name="settings-outline"></ion-icon>
+                            </div>
+                            <div class="text">Settings</div>
+                        </a>
+                    </li>
+            </div>
+            <div class="bottom">
+                <li style="--bg: #333">
                     <a href="#">
                         <div class="icon">
-                            <img src="~/images/icon.jpg" style="border-radius: 75px;width: 60px;height: 40px;" />
+                            <div class="imgBx">
+                                <img src="~/images/@ViewData["AvatarUrl"]" width="70px" height="70px" />
+                            </div>
                         </div>
-                        <div class="text">Matcher</div>
+                        <div class="text">@ViewData["Admin name"]</div>
                     </a>
                 </li>
-                <div class="Menulist">
-                <li class="Home" style="--bg: #f44336" class="active">
-                    <a href="/Admin">
-                        <div class="icon"><ion-icon name="home-outline"></ion-icon></div>
-                        <div class="text">Home</div>
-                    </a>
-                </li>
-                <li class="User" style="--bg: #ffa117">
-                    <a href="/Admin/User">
+                <li style="--bg: #333">
+                    <a href="/Admin/Logout">
                         <div class="icon">
-                            <ion-icon name="person-outline"></ion-icon>
+                            <ion-icon name="log-out-outline"></ion-icon>
                         </div>
-                        <div class="text">User</div>
+                        <div class="text">Logout</div>
                     </a>
                 </li>
-                <li class="Analytics" style="--bg: #2196f3">
-                    <a href="#">
-                        <div class="icon">
-                            <ion-icon name="bar-chart-outline"></ion-icon>
-                        </div>
-                        <div class="text">Analytics</div>
-                    </a>
-                </li>
-                <li class="HistoryOrder" style="--bg: #b145e9">
-                    <a href="#">
-                        <div class="icon"><ion-icon name="cart-outline"></ion-icon></div>
-                        <div class="text">History Order</div>
-                    </a>
-                </li>
-                <li class="Settings" style="--bg: #e91e63">
-                    <a href="#">
-                        <div class="icon">
-                            <ion-icon name="settings-outline"></ion-icon>
-                        </div>
-                        <div class="text">Settings</div>
-                    </a>
-                </li>
-        </div>
-        <div class="bottom">
-            <li style="--bg: #333">
-                <a href="#">
-                    <div class="icon">
-                        <div class="imgBx">
-                            <img src="~/images/@ViewData["AvatarUrl"]" width="70px" height="70px" />
-                        </div>
-                    </div>
-                    <div class="text">@ViewData["Admin name"]</div>
-                </a>
-            </li>
-            <li style="--bg: #333">
-                <a href="/Admin/Logout">
-                    <div class="icon">
-                        <ion-icon name="log-out-outline"></ion-icon>
-                    </div>
-                    <div class="text">Logout</div>
-                </a>
-            </li>
-        </div>
-        </ul>
-        </div>
+            </div>
+            </ul>
+    </div>
     </nav>
-    @RenderBody()
+        @RenderBody()
+    </div>
     <script type="module"
             src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule
@@ -89,9 +85,11 @@
     <script>
         let menuToggle = document.querySelector(".menuToggle");
         let sideBar = document.querySelector(".sidebar");
+        let content = document.querySelector(".content");
         menuToggle.onclick = function () {
             menuToggle.classList.toggle("active");
             sideBar.classList.toggle("active");
+            content.classList.toggle("active");
         };
 
         let Menulist = document.querySelectorAll(".Menulist li");
@@ -101,5 +99,6 @@
         }
         Menulist.forEach((item) => item.addEventListener("click", activeLink));
     </script>
+
 </body>
 </html>

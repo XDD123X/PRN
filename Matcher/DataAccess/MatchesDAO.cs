@@ -11,6 +11,7 @@ namespace Matcher.DataAccess
         public void Add(Match match)
         {
             _context.Add(match);
+            _context.SaveChanges();
         }
         public List<Match> GetUsersMatchedByUserID(int userId)
         {

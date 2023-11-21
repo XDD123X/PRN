@@ -1,0 +1,289 @@
+﻿@using Matcher.Models;
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Pricing</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        .container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 30px;
+            height: 30px;
+            border: #ccc solid 1px;
+            border-radius: 50%;
+            top: 2.5rem;
+            left: 10%;
+        }
+
+            .checkmark:after {
+                content: "";
+                position: absolute;
+                display: none;
+            }
+
+        .container .checkmark:after {
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: solid 5px white;
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+
+        .container input:checked ~ .checkmark {
+            background: #ae830c;
+            border: none;
+        }
+
+            .container input:checked ~ .checkmark:after {
+                display: block;
+            }
+
+        .card-radio-group .card {
+            border: 0px solid #ccc;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            border: 3px solid #fff;
+        }
+
+            .card-radio-group .card.selected {
+                border: 3px solid #ae830c;
+                border-radius: 16px;
+                background-color: #fff2bf;
+            }
+
+        .card-radio-group .card-body {
+            text-align: center;
+        }
+
+        .features-section {
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .feature-title {
+            font-size: 20px;
+            color: #dc3545;
+            margin-bottom: 15px;
+            position: relative;
+            top: 1.8rem;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .feature-list {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        .feature-item {
+            font-size: 16px;
+        }
+
+            .feature-item i {
+                margin-right: 10px;
+            }
+
+        .fs-7 {
+            font-size: 12px;
+        }
+
+        .badge {
+            border-radius: 16px;
+            border: #ccc solid 1px;
+            background-color: #f0f2f4;
+        }
+
+        .bg-gra {
+            background: linear-gradient(135deg, #ffffff 0%, #f8d781 100%);
+            min-height: 72px;
+        }
+
+        .border-none {
+            border: none;
+        }
+
+        .border-8 {
+            border-radius: 8px !important;
+        }
+
+        .border-30 {
+            border-radius: 30px !important;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, #e6af16 0%, #f8d781 100%);
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-7">
+                <div class="sticky-top card border-none pt-4 pb-4">
+                    <div class="shadow-sm bg-gra d-flex justify-content-center align-items-center border-8">
+                        <svg width="120" height="24" viewBox="0 0 120 24" xmlns="http://www.w3.org/2000/svg">
+
+                            <title>Tinder Gold™</title>
+                            <g fill-rule="nonzero" fill="none">
+                                <path d="M5.027 7.858C8.775 6.574 9.414 3.23 8.934.157c0-.112.096-.19.193-.143 3.589 1.727 7.625 5.514 7.625 11.218 0 4.374-3.414 8.24-8.376 8.24C3.08 19.472 0 15.717 0 11.232c0-2.614 1.866-5.308 3.877-6.448.097-.064.223 0 .223.11.049.587.208 2.076.862 2.948.016.016.049.016.065.016zm82.84-1.27c.194-.672.922-1.218 1.625-1.218h25.005c.706 0 1.12.547.928 1.218l-3.176 11.086c-.193.672-.92 1.218-1.624 1.218H85.62c-.706 0-1.12-.546-.928-1.218l3.176-11.086z"
+                                      fill="#e6af16" transform="translate(2 2)"></path>
+
+                                <text x="22" y="20" fill="currentColor" class="fw-bold fs-6">Matcher</text>
+                                <path d="M94.806 17c.956 0 1.708-.437 2.244-1.097v-2.22h-2.514v1.076h1.392v.694c-.214.216-.657.443-1.123.443-.957 0-1.652-.807-1.652-1.9 0-1.095.695-1.903 1.652-1.903.561 0 1.012.348 1.249.757l.933-.556c-.395-.684-1.083-1.292-2.18-1.292-1.541 0-2.807 1.163-2.807 2.994C92 15.82 93.266 17 94.807 17zm5.635-.01c-1.588 0-2.75-1.25-2.75-2.996 0-1.744 1.162-2.994 2.751-2.994 1.597 0 2.759 1.25 2.759 2.994 0 1.745-1.162 2.995-2.759 2.995l-.001.001zm0-1.095c.974 0 1.604-.824 1.604-1.9 0-1.086-.63-1.903-1.604-1.903-.972 0-1.596.817-1.596 1.902 0 1.077.624 1.902 1.596 1.902v-.001zm6.9.99V15.8h-2.229v-4.705h-1.122v5.79h3.352zm2.862 0h-2.08v-5.79h2.08c1.652 0 2.797 1.155 2.797 2.9 0 1.744-1.145 2.89-2.797 2.89zm0-1.085c1.043 0 1.652-.824 1.652-1.806 0-1.025-.57-1.814-1.652-1.814h-.957v3.62h.957z"
+                                      fill="#fff"></path>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+                <div class="features-section overflow-y-auto">
+                    <div class="feature-title">
+                        <span class="badge text-bg-light fs-7 fw-normal">Upgrade Your Likes</span>
+                    </div>
+                    <div class="card px-4 ">
+                        <ul class="feature-list">
+                            <li class="feature-item fw-medium fs-5"><i class="fs-1 bi bi-check"></i>Unlimited Likes</li>
+                            <li class="feature-item fw-medium fs-5">
+                                <i class="fs-1 bi bi-check"></i>See who Likes You
+                            </li>
+                            <li class="feature-item fw-medium fs-5"><i class="fs-1 bi bi-check"></i>Priority Likes</li>
+                        </ul>
+                    </div>
+                    <div class="feature-title">
+                        <span class="badge text-bg-light fs-7 fw-normal">Upgrade Your Experience</span>
+                    </div>
+                    <div class="card px-4 ">
+                        <ul class="feature-list">
+                            <li class="feature-item fw-medium fs-5">
+                                <i class="fs-1 bi bi-check"></i>Unlimited Rewind
+                            </li>
+                            <li class="feature-item fw-medium fs-5">
+                                <i class="fs-1 bi bi-check"></i>1 Free Boost per
+                                month
+                            </li>
+                            <li class="feature-item fw-medium fs-5">
+                                <i class="fs-1 bi bi-check"></i>5 Free Super Likes
+                                per week
+                            </li>
+                            <li class="feature-item fw-medium fs-5">
+                                <i class="fs-1 bi bi-check"></i>Message before
+                                matching
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="feature-title">
+                        <span class="badge text-bg-light fs-7 fw-normal">Premium Search</span>
+                    </div>
+                    <div class="card px-4 ">
+                        <ul class="feature-list">
+                            <li class="feature-item fw-medium fs-5">
+                                <i class="fs-1 bi bi-check"></i>Passport - Match
+                                with people anywhere in the world
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="feature-title">
+                        <span class="badge text-bg-light fs-7 fw-normal">Take control</span>
+                    </div>
+                    <div class="card px-4 ">
+                        <ul class="feature-list">
+                            <li class="feature-item fw-medium fs-5">
+                                <i class="fs-1 bi bi-check"></i>Control your Profile
+                            </li>
+                            <li class="feature-item fw-medium fs-5">
+                                <i class="fs-1 bi bi-check"></i>Control who sees you
+                            </li>
+                            <li class="feature-item fw-medium fs-5">
+                                <i class="fs-1 bi bi-check"></i>Control who you see
+                            </li>
+                            <li class="feature-item fw-medium fs-5"><i class="fs-1 bi bi-lock-fill"></i>Hide Ads</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+				<div class="col-md-5 sticky-top">
+                <form action="/Product/CreatePaymentUrl" id="frmCreateOrder" method="POST">
+					<div class="p-3 text-center">
+						<h1 class="fw-bold fs-3">Buy Matcher Gold</h1>
+						<p class="fs-6">Get Tinder Gold and unlock all the benefits of a Matcher subscription.</p>
+					</div>
+					<div class="card-radio-group">
+						@foreach (Plan p in ViewBag.Plans)
+						{
+							<div class="card mb-3" id="opztion@p.PlanId">
+								<input type="radio" name="PlanID" value="@p.PlanId">
+								<span class="checkmark"></span>
+								<div class="card-body">
+									@{
+										string durationText = p.Duration > 1 ? "Months" : "Month";
+									}
+
+									<h5 class="card-title fs-2">@p.Duration @durationText</h5>
+									@{
+										// Get the values from your model
+										decimal value1 = p.Amount;
+										decimal value2 = p.Duration;  
+
+										// Perform division
+										decimal result = value2 != 0 ? Math.Round(value1 / value2, 2) : 0.0m;
+									}
+									<p class="card-text fs-5">$@result/month</p>
+								</div>
+							</div>
+						}
+					</div>
+					<div class="p-4">
+						<!-- Buy Now button -->
+						<a href="#">
+							<button type="submit" class="btn btn-primary w-100 mt-3 border-30 btn-gradient">
+								<span class="fs-5 fw-bold text-dark">Buy Now</span>
+							</button>
+						</a>
+						<!-- No, Thanks button -->
+						<a href="">
+							<button class="btn btn-secondary w-100 mt-4 bg-body border-0">
+								<span class="fs-5 fw-bold text-secondary">No, Thanks</span>
+							</button>
+						</a>
+					</div>
+                </form>
+				</div>
+			
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $('.card-radio-group .card').click(function () {
+                $('.card-radio-group .card').removeClass('selected');
+                $(this).addClass('selected');
+                $(this).find('input[type="radio"]').prop('checked', true);
+            });
+        });
+    </script>
+</body>
+
+</html>

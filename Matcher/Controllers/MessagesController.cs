@@ -12,26 +12,52 @@ namespace Matcher.Controllers
             _context = context;
         }
         // GET: MessagesController
-        public ActionResult Index()
+        public ActionResult Index(int id, int searchid)
         {
             int inlogin = (int)HttpContext.Session.GetInt32("curUser");
             User userlogin = _context.Users.FirstOrDefault(x => x.UserId == inlogin);
             ViewBag.user = userlogin;
-            if(userlogin.UserId == 1)
-            {
-                List<Message> messages = _context.Messages.Where(x => (x.ToUserId == userlogin.UserId && x.FromUserId == 2)
-            || (x.ToUserId == 2 && x.FromUserId == userlogin.UserId)).OrderBy(x => x.MessageId).ToList();
+            
+                List<Message> messages = _context.Messages.Where(x => (x.ToUserId == userlogin.UserId && x.FromUserId == id)
+            || (x.ToUserId == id && x.FromUserId == userlogin.UserId)).OrderBy(x => x.MessageId).ToList();
                 ViewBag.messages = messages;
+                ViewBag.id = id;
+            if(searchid == null || searchid == 0)
+            {
+                List<int?> usermatch = _context.Messages.Where(x => x.FromUserId == inlogin).Select(x => x.ToUserId).Distinct().ToList();
+                ViewBag.messid = usermatch;
             }
             else
             {
-                List<Message> messages = _context.Messages.Where(x => (x.ToUserId == userlogin.UserId && x.FromUserId == 1)
-            || (x.ToUserId == 1 && x.FromUserId == userlogin.UserId)).OrderBy(x => x.MessageId).ToList();
-                ViewBag.messages = messages;
+                List<int?> usermatch = _context.Messages.Where(x => x.FromUserId == inlogin && x.ToUserId == searchid).Select(x => x.ToUserId).Distinct().ToList();
+                ViewBag.messid = usermatch;
             }
-                
+            
             return View();
         }
+        
+        public ActionResult saveMess(int userid, int toUserId, string messagetext) 
+        {
+            if(messagetext != null && !messagetext.Equals(" "))
+            {
+                Message message = new Message
+                {
+                    FromUserId = userid,
+                    ToUserId = toUserId,
+                    MessageText = messagetext,
+                    DateSent = DateTime.Now
+                };
+                _context.Messages.Add(message);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+            
+        }
+
 
         // GET: MessagesController/Details/5
         public ActionResult Details(int id)

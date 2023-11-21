@@ -2,6 +2,7 @@
 using Matcher.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Matcher.Controllers
 {
@@ -43,16 +44,15 @@ namespace Matcher.Controllers
         public IActionResult Swipe()
         {
             UserDAO userDAO = new UserDAO(_context);
-            User curUser = null;
             var id = HttpContext.Session.GetInt32("curUser") ?? -1;
-            if (id != null && id > 0)
+            if (id > 0)
             {
-                curUser = userDAO.Get(id);
+				User curUser = userDAO.Get(id);
                 ViewBag.User = curUser;
                 List<User> MatchUsers = userDAO.GetListMatchUserByUserID(curUser.UserId);
                 User user = userDAO.GetUnMatchUserByUserID(curUser.UserId, 0);
                 ViewBag.UserSwipe = user;
-
+                ViewBag.skip = 0;
 				return View(MatchUsers);
             }
             else
@@ -61,8 +61,67 @@ namespace Matcher.Controllers
             }
         }
 
-        // GET: Users/Create
-        public IActionResult Create()
+		public JsonResult Like(int id, int skip)
+		{
+			UserDAO userDAO = new UserDAO(_context);
+			int CurId = HttpContext.Session.GetInt32("curUser") ?? -1;
+			if (CurId > 0)
+			{
+				User curUser = userDAO.Get(CurId);
+				if (curUser.UserType.Equals("FREE") && _context.LikeLimits.Where(u => u.UserId == CurId).Select(l => l.LikesToday).First() <= 0)
+				{
+					return Json(new { status = false });
+				}
+				MatchesDAO matchesDAO = new MatchesDAO(_context);
+                matchesDAO.Add(new Match
+                {
+                    UserId = CurId,
+                    MatchedUserId = id,
+                    DateMatched = DateTime.Now
+                });
+                bool IsMatch = _context.Matches.Where(u => u.MatchedUserId == CurId && u.UserId==id).ToList().Any();
+                User UserMatch = new User();
+                if (IsMatch) { 
+                    UserMatch = userDAO.Get(id); 
+                    _context.Messages.Add(new Message { FromUserId = CurId, ToUserId = id, MessageText = "Hi!", DateSent = DateTime.Now });
+                    _context.SaveChanges();
+                }
+				User user = userDAO.GetUnMatchUserByUserID(curUser.UserId, skip);
+                UserPhotosDAO userPhotosDAO = new UserPhotosDAO(_context);
+				List<string> photosUser = userPhotosDAO.GetListPhotosByUsrID(user.UserId);
+				LikeLimit likeLimit = _context.LikeLimits.Where(u => u.UserId == CurId).First();
+				likeLimit.DailyLikeLimit -= 1;
+				_context.LikeLimits.Update(likeLimit);
+				_context.SaveChanges();
+				return Json(new { userid = user.UserId, data = photosUser, skip = skip, status = true, name = user.Name, des = user.Description, age = DateTime.Today.Year - user.DateOfBirth?.Year, isMatch = IsMatch, userMatch = new { name=UserMatch.Name, avt= userPhotosDAO.GetAvatarByUsrID(UserMatch.UserId) } });
+			}
+			else
+			{
+				return Json(new {status = false});
+			}
+		}
+
+		public JsonResult Nope(int id, int skip)
+		{
+			UserDAO userDAO = new UserDAO(_context);
+			int CurId = HttpContext.Session.GetInt32("curUser") ?? -1;
+			if (CurId > 0)
+			{
+				User curUser = userDAO.Get(CurId);
+				skip+=1;
+				User user = userDAO.GetUnMatchUserByUserID(curUser.UserId, skip);
+				UserPhotosDAO userPhotosDAO = new UserPhotosDAO(_context);
+				List<string> photosUser = userPhotosDAO.GetListPhotosByUsrID(user.UserId);
+				return Json(new {userid= user.UserId, data = photosUser, skip=skip, status = true, name= user.Name, des=user.Description, age = DateTime.Today.Year - user.DateOfBirth?.Year });
+			}
+			else
+			{
+				return Json(new { status = false });
+			}
+		}
+
+		// GET: Users/Create
+		public IActionResult Create()
         {
             return View();
         }
@@ -79,7 +138,7 @@ namespace Matcher.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = _context.Users.Where(u => u.Email.Equals(userLoginModel.Email)).First();
+                User user = _context.Users.Where(u => u.Email.Equals(userLoginModel.Email)).FirstOrDefault();
                
                 if (user != null)
                 {
@@ -88,6 +147,18 @@ namespace Matcher.Controllers
 
                     user.Ipaddress = userIpAddress;
                     _context.SaveChanges();
+                    IpbannedDAO ipbannedDAO = new IpbannedDAO(_context);
+                    // Check the ip existence in banned ip
+                    if (ipbannedDAO.Get(userIpAddress) != null)
+                    {
+                        ModelState.AddModelError("", "You have been banned from website");
+                        return View();
+                    }
+                    if (user.Status == false)
+                    {
+                        ModelState.AddModelError("", "You have been deactivate from website");
+                        return View();
+                    }
 
                     HttpContext.Session.SetInt32("curUser", user.UserId);
                     return RedirectToAction("Swipe", "Users");
@@ -199,20 +270,18 @@ namespace Matcher.Controllers
         // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async void DeleteConfirmed(int id)
         {
             if (_context.Users == null)
             {
-                return Problem("Entity set 'VoVoContext.Users'  is null.");
+                return;
             }
-            var user = await _context.Users.FindAsync(id);
+            UserDAO userDAO = new UserDAO(_context);
+            User user = userDAO.Get(id);
             if (user != null)
             {
-                _context.Users.Remove(user);
+                userDAO.Delete(user);
             }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         private bool UserExists(int id)
@@ -241,6 +310,16 @@ namespace Matcher.Controllers
             {
                 if (user != null)
                 {
+                    // Retrieve the ip address of user
+                    IpbannedDAO ipbannedDAO = new IpbannedDAO(_context);
+                    string userIpAddress = HttpContext.Connection.RemoteIpAddress.ToString();
+                    user.Ipaddress = userIpAddress;
+                    if (ipbannedDAO.Get(userIpAddress) != null)
+                    {
+                        ModelState.AddModelError("", "You have been banned from website");
+                        return View();
+                    }
+
                     _context.Users.Add(user);
                     _context.SaveChanges();
                     return RedirectToAction("Login", "Users");
@@ -255,6 +334,80 @@ namespace Matcher.Controllers
             {
                 return View();
             }
+        }
+        public ActionResult GetPage(String pageNumber)
+        {
+            UserDAO userDAO = new UserDAO(_context);
+            List<User> users = userDAO.GetPaginatedList(pageNumber);
+            IpbannedDAO ipbannedDAO = new IpbannedDAO(_context);
+            List<UserManageModel> list = new List<UserManageModel>();
+            foreach (User user in users)
+            {
+                UserManageModel userManageModel = new UserManageModel(user);
+                if (ipbannedDAO.Get(userManageModel.Ipaddress) != null) {
+                    userManageModel.IsBanIP = true;
+                } else
+                {
+                    userManageModel.IsBanIP = false;
+                }
+                list.Add(userManageModel);
+            }
+
+            return Json(list);
+        }
+        [HttpPost]
+        public async void Disable(int id)
+        {
+            if (_context.Users == null)
+            {
+                return;
+            }
+            UserDAO userDAO = new UserDAO(_context);
+            User user = userDAO.Get(id);
+            user.Status = false;
+            if (user != null)
+            {
+                userDAO.Update(user);
+            }
+        }
+        [HttpPost]
+        public async void Enable(int id)
+        {
+            if (_context.Users == null)
+            {
+                return;
+            }
+            UserDAO userDAO = new UserDAO(_context);
+            User user = userDAO.Get(id);
+            user.Status = true;
+            if (user != null)
+            {
+                userDAO.Update(user);
+            }
+        }
+
+
+        [HttpPost]
+        public async void BanIP(String ipAddress)
+        {
+            if (_context.Ipbanneds == null)
+            {
+                return;
+            }
+            IpbannedDAO ipbannedDAO = new IpbannedDAO(_context);
+            ipbannedDAO.Add(ipAddress);
+
+        }
+        [HttpPost]
+        public async void UnbanIP(String ipAddress)
+        {
+            if (_context.Ipbanneds == null)
+            {
+                return;
+            }
+            IpbannedDAO ipbannedDAO = new IpbannedDAO(_context);
+            ipbannedDAO.Remove(ipAddress);
+
         }
     }
 }

@@ -15,16 +15,19 @@ namespace Matcher.DataAccess
         public void Add(User user)
         {
             _context.Users.Add(user);
+            _context.SaveChanges();
         }
 
         public void Update(User user)
         {
             _context.Users.Update(user);
+            _context.SaveChanges();
         }
 
         public void Delete(User user)
         {
-            _context.Remove(user);
+            _context.Users.Remove(user);
+            _context.SaveChanges();
         }
 
         public User Get(int id)
@@ -35,6 +38,16 @@ namespace Matcher.DataAccess
         public List<User> GetAll()
         {
             return _context.Users.ToList();
+        }
+
+        public List<User> GetPaginatedList(String pageNumber)
+        {
+            return _context.Users.Skip((int.Parse(pageNumber) - 1) * 10).Take(10).ToList();
+        }
+
+        public int GetMaximumPagination()
+        {
+            return ((_context.Users.Count()%10) == 0) ? _context.Users.Count() / 10 : (_context.Users.Count() / 10) + 1;
         }
 
         public List<User> GetListMatchUserByUserID(int userId)
@@ -52,7 +65,7 @@ namespace Matcher.DataAccess
         public User GetUnMatchUserByUserID(int userID, int skip)
         {
             MatchesDAO matchesDAO = new MatchesDAO(_context);
-            var matching = matchesDAO.GetUsersMatchingByUserID(userID).Select(m => m.UserId).Distinct();
+            var matching = matchesDAO.GetUsersMatchedByUserID(userID).Select(m => m.MatchedUserId).Distinct();
             var users = _context.Users.Where(u => u.UserId != userID && !matching.Contains(u.UserId)).Skip(skip).Take(1).ToList();
             return users.Any() ? users.First() : null;
 		}

@@ -6,8 +6,7 @@
 
 @{
     VoVoContext _context = new VoVoContext();
-    UserDAO userDAO = new UserDAO(_context);
-    IpbannedDAO ipbannedDAO = new IpbannedDAO(_context);
+    SubscriptionDAO subscriptionDAO = new SubscriptionDAO(_context);
 }
 <style>
     .styled-table {
@@ -73,7 +72,7 @@
 
 
     .content {
-        width: 900px;
+        width: 1000px;
         background: white;
         padding: 20px 20px;
         margin: 0 auto;
@@ -98,27 +97,34 @@
 
     .menuToggle {
         position: fixed;
-        }
+    }
 </style>
 
 <div class="content">
     <div class="header">
-        <h2>User table</h2>
+        <h2>Upgrade History</h2>
     </div>
     <table class="styled-table">
         <thead>
             <tr>
                 <th>
-                    Name
+                    User ID
                 </th>
                 <th>
-                    Email
+                    Total Cost
                 </th>
                 <th>
-                    Ip Address
+                    Start Date
                 </th>
-                <th>Status</th>
-                <th class="action">Action</th>
+                <th>
+                    End Date
+                </th>
+                <th>
+                    Payment Status
+                </th>
+                <th>
+                    Created Date
+                </th>
             </tr>
         </thead>
         <tbody id="tableBody">
@@ -137,7 +143,7 @@
             <path d="M20.75 19.0526C20.75 20.4774 19.1383 21.305 17.9803 20.4748L7.51062 12.9682C6.50574 12.2477 6.54467 10.7407 7.5854 10.073L18.0551 3.35665C19.2198 2.60946 20.75 3.44583 20.75 4.82961L20.75 19.0526Z" fill="#212121" />
         </svg>
         <select id="pageSelect" onchange="selectPage()">
-            @for (int index = 1; index <= userDAO.GetMaximumPagination(); index++)
+            @for (int index = 1; index <= subscriptionDAO.GetMaximumPagination(); index++)
             {
                 <option value="@index">Page @index</option>
             }
@@ -158,13 +164,13 @@
 
 <script>
     let pageNumber = 1;
-    const maximumPaginationPage = @userDAO.GetMaximumPagination();
+    const maximumPaginationPage = @subscriptionDAO.GetMaximumPagination();
 
     document.addEventListener("DOMContentLoaded", function () {
 
         let Menulist = document.querySelectorAll(".Menulist li");
         Menulist.forEach((item) => item.classList.remove("active"));
-        const liElement = document.querySelector(".User");
+        const liElement = document.querySelector(".UpgradeHistory");
         liElement.classList.toggle("active");
     });
 
@@ -209,7 +215,7 @@
     }
     function loadPage() {
         $.ajax({
-            url: `/Users/GetPage?pageNumber=${pageNumber}`,
+            url: `/Admin/GetSubscriptionPage?pageNumber=${pageNumber}`,
             type: 'GET',
             success: function (data) {
                 // Create an empty table body
@@ -217,69 +223,35 @@
                 tableBody.empty();
                 let count = 0;
                 // Iterate through the list of users
-                for (const user of data) {
+                for (const upgradeHistory of data) {
                     count++;
-                    // Create a table row
                     const row = $('<tr>');
-                    if (user.isBanIP == true) {
-                        row.css('color', 'red');
-                    }
+                    const startDate = new Date(upgradeHistory["startDate"]);
+                    const endDate = new Date(upgradeHistory["endDate"]);
+                    const createdDate = new Date(upgradeHistory["createdDate"]);
+                    const options = {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    };  
+
                     // Add cells for each table column
-                    row.append('<td>' + user["name"] + '</td>');
-                    row.append('<td>' + user["email"] + '</td>');
-                    row.append('<td>' + user["ipaddress"] + '</td>');
-                    row.append('<td>' + user["status"] + '</td>');
-
-                    // Add the action cell with the enable or disable eye
-                    const actionCell = $('<td>');
-                    actionCell.addClass('action');
-
-                    if (user["status"] == false) {
-                        var img = document.createElement('img');
-                        img.src = 'https://www.svgrepo.com/show/532493/eye.svg';
-                        img.title = 'Active user';
-                        img.width = 30;
-                        img.height = 30;
-                        img.alt = 'Active';
-                        img.setAttribute('onclick', 'enable(' + user.userId + ')');
-
-                        actionCell.append(img);
+                    row.append('<td>' + upgradeHistory["userId"] + '</td>');
+                    row.append('<td>' + upgradeHistory["totalCost"] + '$' + '</td>');
+                    row.append('<td>' + Intl.DateTimeFormat('en-US', options).format(startDate) + '</td>'); 
+                    if (upgradeHistory["endDate"] == null) {
+                        row.append('<td>Never</td>');
                     } else {
-                        var img = document.createElement('img');
-                        img.src = 'https://www.svgrepo.com/show/532465/eye-slash.svg';
-                        img.title = 'Deactive user';
-                        img.width = 30;
-                        img.height = 30;
-                        img.alt = 'Deactive';
-                        img.setAttribute('onclick', 'disable(' + user.userId + ')');
-
-
-                        actionCell.append(img);
+                        row.append('<td>' + Intl.DateTimeFormat('en-US', options).format(endDate) + '</td>');
                     }
-
-                    if (user.isBanIP == false) {
-                        var banIP = document.createElement('img');
-                        banIP.src = 'https://www.svgrepo.com/show/532341/unlock-alt.svg';
-                        banIP.title = 'Ban IP';
-                        banIP.width = 30;
-                        banIP.height = 30;
-                        banIP.alt = 'BanIP';
-                        banIP.setAttribute('onclick', 'BanIP(`' + user.ipaddress + '`)');
-                        actionCell.append(banIP);
-                    } else {
-                        var unbanIP = document.createElement('img');
-                        unbanIP.src = 'https://www.svgrepo.com/show/532323/lock-alt.svg';
-                        unbanIP.title = 'Unban IP';
-                        unbanIP.width = 30;
-                        unbanIP.height = 30;
-                        unbanIP.setAttribute('onclick', 'UnbanIP(`' + user.ipaddress + '`)');
-                        actionCell.append(unbanIP);
-                    }
-                    row.append(actionCell);
+                    row.append('<td>' + upgradeHistory["paymentStatus"] + '</td>');
+                    row.append('<td>' + Intl.DateTimeFormat('en-US', options).format(createdDate) + '</td>');
                     tableBody.append(row);
                 }
                 for (let i = 1; i <= (10 - count); i++) {
-
                     const newRow = $('<tr>');
                     newRow.append('<td>\u00A0</td>');
                     newRow.append('<td>\u00A0</td>');
@@ -294,70 +266,7 @@
                 console.error(error);
             }
         });
-
-
     }
 
-    // Disable  user
-    function disable(userId) {
-        $.ajax({
-            url: '/Users/Disable',
-            type: 'POST',
-            data: {
-                id: parseInt(userId)
-            },
-            success: function (response) {
-                loadPage();
-            }, error: function (error) {
-                console.error(error);
-            }
-        });
-    }
-    // Enable  user
-    function enable(userId) {
-        $.ajax({
-            url: '/Users/Enable',
-            type: 'POST',
-            data: {
-                id: parseInt(userId)
-            },
-            success: function (response) {
-                loadPage();
-            }, error: function (error) {
-                console.error(error);
-            }
-        });
-    }
-    // Ban IP
-    function BanIP(ipaddress) {
-        $.ajax({
-            url: '/Users/BanIP',
-            type: 'POST',
-            data: {
-                ipAddress: ipaddress
-            },
-            success: function (response) {
-                loadPage();
-            }, error: function (error) {
-                console.error(error);
-            }
-        });
-    }
-    // Unban IP
-    // Ban IP
-    function UnbanIP(ipaddress) {
-        $.ajax({
-            url: '/Users/UnbanIP',
-            type: 'POST',
-            data: {
-                ipAddress: ipaddress
-            },
-            success: function (response) {
-                loadPage();
-            }, error: function (error) {
-                console.error(error);
-            }
-        });
-    }
     window.onload = loadPage();
 </script>

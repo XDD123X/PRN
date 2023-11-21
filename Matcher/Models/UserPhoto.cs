@@ -1,4 +1,7 @@
-﻿namespace Matcher.Models
+﻿using System;
+using System.Collections.Generic;
+
+namespace Matcher.Models
 {
     public partial class UserPhoto
     {

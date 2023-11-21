@@ -204,3 +204,19 @@ body {
         width: 60px;
         height: 60px;
     }
+
+.card {
+    /* Các kiểu dáng chung của thẻ card */
+    position: relative;
+    transition: transform 0.3s ease-out;
+}
+
+.swiped-left {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-out;
+}
+
+.swiped-right {
+    transform: translateX(100%);
+    transition: transform 0.3s ease-out;
+}

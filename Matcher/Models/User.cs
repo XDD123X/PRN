@@ -14,6 +14,7 @@ namespace Matcher.Models
             MessageFromUsers = new HashSet<Message>();
             MessageToUsers = new HashSet<Message>();
             Reports = new HashSet<Report>();
+            Subscriptions = new HashSet<Subscription>();
         }
 
         public int UserId { get; set; }
@@ -27,7 +28,9 @@ namespace Matcher.Models
         public string? UserType { get; set; }
         public bool? Status { get; set; }
         public string? Ipaddress { get; set; }
+        public DateTime CreatedDate { get; set; }
 
+        public virtual LikeLimit? LikeLimit { get; set; }
         public virtual ICollection<Like> LikeLikedUsers { get; set; }
         public virtual ICollection<Like> LikeLikers { get; set; }
         public virtual ICollection<Match> MatchMatchedUsers { get; set; }
@@ -35,5 +38,6 @@ namespace Matcher.Models
         public virtual ICollection<Message> MessageFromUsers { get; set; }
         public virtual ICollection<Message> MessageToUsers { get; set; }
         public virtual ICollection<Report> Reports { get; set; }
+        public virtual ICollection<Subscription> Subscriptions { get; set; }
     }
 }

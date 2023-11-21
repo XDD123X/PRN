@@ -9,8 +9,6 @@ namespace Matcher.Models
         public int? LikerId { get; set; }
         public int? LikedUserId { get; set; }
         public DateTime? DateLiked { get; set; }
-        public int? LikesToday { get; set; }
-        public int? DailyLikeLimit { get; set; }
 
         public virtual User? LikedUser { get; set; }
         public virtual User? Liker { get; set; }

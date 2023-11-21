@@ -120,7 +120,8 @@ section .signin .content .form .inputBx i{
 .signin .content .form .inputBx input:not(:placeholder-shown) ~ i {
 	transform: translateY(-7.5px);
 	font-size: 0.8em;
-	color: #fff;
+	color: saddlebrown;
+	font-weight: bold;
 }
 .signin .content .form .links{
 	position: relative;

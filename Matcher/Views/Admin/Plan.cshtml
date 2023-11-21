@@ -1,0 +1,107 @@
+﻿@using Matcher.DataAccess;
+@using Matcher.Models;
+@{
+    Layout = "Layout.cshtml";
+}
+<style>
+    .header h2 {
+        text-align: center;
+    }
+
+    img {
+        -webkit-user-drag: none;
+        -moz-user-drag: none;
+        -ms-user-drag: none;
+        user-drag: none;
+    }
+
+    .content {
+        width: 400px;
+        background: white;
+        padding: 20px 20px;
+        margin: auto auto;
+        transition: margin-left 0.5s ease-out;
+    }
+
+        .content.active {
+            margin-left: 600px;
+        }
+
+    #settingsForm {
+        text-align: left;
+        margin: 0 30px;
+    }
+
+        #settingsForm input {
+            width: 300px;
+        }
+
+        #settingsForm button {
+            margin-top: 20px;
+            width: 150px;
+            margin-left: 150px;
+            padding: 10px 20px; /* Adjust padding to make the button bigger */
+            font-size: 16px; /* Adjust font size */
+            border: none; /* Remove border */
+            background-color: #4CAF50; /* Set background color */
+            color: white; /* Set text color */
+            cursor: pointer; /* Add cursor pointer on hover */
+            border-radius: 5px; /* Optional: Add border-radius for rounded corners */
+        }
+
+            #settingsForm button:hover {
+                background-color: #45a049;
+            }
+</style>
+
+<div class="content">
+    <div class="header">
+        <h2>Plan setting</h2>
+    </div>
+    <form id="settingsForm" asp-controller="Admin" asp-action="UpdateSetting" method="post">
+        <!-- Use a partial view to render the input fields -->
+        <div id="settingsList"></div>
+        <button class="submit-button" type="submit">Save change</button>
+    </form>
+    <div style="color: gold;">
+        @ViewData["Message"]
+    </div>
+</div>
+<script>
+    function loadPage() {
+        $.ajax({
+            url: `/Admin/GetAttributeList`,
+            type: 'GET',
+            success: function (data) {
+                var form = $("#settingsList");
+                let count = 0;
+                // Iterate through the list of settings
+                for (const setting of data) {
+                    if (++count == 1) continue;
+                    var pElement = $("<label>").text(setting.planName + ' ( ' + setting.duration + ' month) price :');
+                    // Create an input element with the determined type
+                    var inputElement = $("<input>").attr({
+                        type: 'number',
+                        step: '0.01',
+                        name: 'plan' + setting.planId,
+                        value: setting.amount
+                    });
+                    form.append(pElement, inputElement);
+                }
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+
+    function init() {
+        let Menulist = document.querySelectorAll(".Menulist li");
+        Menulist.forEach((item) => item.classList.remove("active"));
+        const liElement = document.querySelector(".Settings");
+        liElement.classList.toggle("active");
+        loadPage();
+    }
+
+    window.onload = init;
+</script>

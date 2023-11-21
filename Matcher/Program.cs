@@ -1,5 +1,6 @@
 using Matcher.Controllers;
 using Matcher.Models;
+using Matcher.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Matcher
@@ -21,14 +22,14 @@ namespace Matcher
 
             builder.Services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(1);
+                options.IdleTimeout = TimeSpan.FromMinutes(10);
                 options.Cookie.Name = ".AdventureWorks.Session";
                 options.Cookie.IsEssential = true;
             });
             builder.Services.AddSignalR();
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddScoped<IVnPayService, VnPayService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

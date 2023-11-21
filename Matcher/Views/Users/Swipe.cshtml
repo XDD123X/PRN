@@ -8,194 +8,187 @@
 }
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="~/css/swipe.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;1,500&display=swap"
-          rel="stylesheet" />
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <title>Swipe</title>
-</head>
-<body>
-    @{
-        VoVoContext _context = new VoVoContext();
-        UserPhotosDAO userPhotosDAO = new UserPhotosDAO(_context);
-    };
-    <div class="container">
-        <div class="side">
-            <div class="header">
-                <div class="avatar">
-                    <img src="@userPhotosDAO.GetAvatarByUsrID(ViewBag.User.UserId)" alt="" />
-                </div>
-                <div class="title">@ViewBag.User.Name</div>
-                <div class="d-flex">
-                    <a class="nav-link text-white" asp-controller="Users" asp-action="Logout">Logout</a>
-                </div>
-            </div>
-            <nav class="menu">
-                <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
-                    <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Match</button>
-                    <button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Message</button>
-                </div>
-            </nav>
-            <div class="tab-content p-3 border bg-light" id="nav-tabContent">
-                <div class="tab-pane fade" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                    <div class="row">
-                        @foreach (var user in Model)
-                        {
-                            <div class="col-4">
-                                <img src="@userPhotosDAO.GetAvatarByUsrID(user.UserId)" alt="avt" style="width: 70px; height: 70px;" />
-                                <p>@user.Name</p>
-                            </div>
-                        }
-                    </div>
-                </div>
-                <div class="tab-pane fade active show" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                    <div class="messages">
-                        <div class="avatar">
-                            <img src="https://randomuser.me/api/portraits/women/38.jpg" alt="" />
-                        </div>
-                        <div class="message">
-                            <div class="user">Caroline</div>
-                            <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing</div>
-                        </div>
-                    </div>
-                    <div class="messages">
-                        <div class="avatar">
-                            <img src="https://randomuser.me/api/portraits/women/39.jpg" alt="" />
-                        </div>
-                        <div class="message">
-                            <div class="user">Caroline</div>
-                            <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing</div>
-                        </div>
-                    </div>
-                    <div class="messages">
-                        <div class="avatar">
-                            <img src="https://randomuser.me/api/portraits/women/40.jpg" alt="" />
-                        </div>
-                        <div class="message">
-                            <div class="user">Caroline</div>
-                            <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing</div>
-                        </div>
-                    </div>
-                    <div class="messages">
-                        <div class="avatar">
-                            <img src="https://randomuser.me/api/portraits/women/41.jpg" alt="" />
-                        </div>
-                        <div class="message">
-                            <div class="user">Caroline</div>
-                            <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing</div>
-                        </div>
-                    </div>
-                    <div class="messages">
-                        <div class="avatar">
-                            <img src="https://randomuser.me/api/portraits/women/42.jpg" alt="" />
-                        </div>
-                        <div class="message">
-                            <div class="user">Caroline</div>
-                            <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="~/css/swipe.css" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;1,500&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+		/>
+		<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+		<title>Swipe</title>
+	</head>
+	<body>
+		@{	VoVoContext _context = new VoVoContext();
+			UserPhotosDAO userPhotosDAO = new UserPhotosDAO(_context);};
+		<div class="container">
+			<div class="side col-md-4">
+				<div class="header">
+					<div class="avatar">
+						<img src="@userPhotosDAO.GetAvatarByUsrID(ViewBag.User.UserId)" alt="" />
+					</div>
+					<div class="title">@ViewBag.User.Name</div>
+				<div class="d-flex">
+					<a class="nav-link text-white" asp-controller="Users" asp-action="Logout">Logout</a>
+				</div>
+				</div>
+				
+		<nav class="menu">
+			<div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+				<button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Match</button>
+				<button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Message</button>
+			</div>
+		</nav>
+		<div class="tab-content p-3 border bg-light" id="nav-tabContent" style="
+    max-height: 75vh;
+    overflow-y: scroll;
+    overflow-x: hidden;">
+			<div class="tab-pane fade" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+				<div class="row" id="list-match">
+						@foreach (var user in Model)
+						{
+							<div class="col-md-3">
+								<img src="@userPhotosDAO.GetAvatarByUsrID(user.UserId)" alt="avt" style="width: 70px; height: 70px;"/>
+								<p>@user.Name</p>
+							</div>
+						}
+				</div>
+			</div>
+			<div class="tab-pane fade active show" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+				<div class="messages">
+					<div class="avatar">
+						<img src="https://randomuser.me/api/portraits/women/38.jpg" alt="" />
+					</div>
+					<div class="message">
+						<div class="user">Caroline</div>
+						<div class="text">Lorem ipsum dolor sit amet consectetur adipisicing</div>
+					</div>
+				</div>
+				<div class="messages">
+					<div class="avatar">
+						<img src="https://randomuser.me/api/portraits/women/39.jpg" alt="" />
+					</div>
+					<div class="message">
+						<div class="user">Caroline</div>
+						<div class="text">Lorem ipsum dolor sit amet consectetur adipisicing</div>
+					</div>
+				</div>
+				<div class="messages">
+					<div class="avatar">
+						<img src="https://randomuser.me/api/portraits/women/42.jpg" alt="" />
+					</div>
+					<div class="message">
+						<div class="user">Caroline</div>
+						<div class="text">Lorem ipsum dolor sit amet consectetur adipisicing</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</div>		
+			
+			<div class="content">
+				<div id="match" class="alert d-flex text-white d-none" role="alert" style="position: fixed;z-index: 10;background: rgb(255 110 110 / 50%);width: 36%;width: 19.5rem;height: 4rem; right: 0;">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-heart-fill" viewBox="0 0 16 16" style="color: #dd0f23;width: 25px;height: 25px;">
+					  <path d="M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9.06 9.06 0 0 0 8 15Zm0-9.007c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"></path>
+					</svg>
+				  <span class="ms-2">You have a new match person!</span>
+				</div>
 
-        <div class="content">
-            @{
-                User UserSwipe = ViewBag.UserSwipe;
-            }
-            @if (UserSwipe != null)
-            {
-                List<string> photosUser = userPhotosDAO.GetListPhotosByUsrID(UserSwipe.UserId);
-                <div class="card">
-                    <div class="user">
+				<div id="expired" class="alert d-flex text-white d-none" role="alert" style="position: fixed;z-index: 10;background: rgb(255 110 110 / 50%);width: 36%;width: 19.5rem;height: 4rem; right: 0;">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-heart-fill" viewBox="0 0 16 16" style="color: #dd0f23;width: 25px;height: 25px;">
+					  <path d="M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9.06 9.06 0 0 0 8 15Zm0-9.007c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"></path>
+					</svg>
+				  <span class="ms-2">buy the gold package to get unlimited swipes!</span>
+				</div>
+			@{
+				User UserSwipe = ViewBag.UserSwipe;
+				int skip = ViewBag.skip;
+			}
+			@if (UserSwipe != null)
+			{
+				List<string> photosUser = userPhotosDAO.GetListPhotosByUsrID(UserSwipe.UserId);
+				<div class="card">
+					<div class="user">
 
-                        <div id="carouselExampleIndicators" class="carousel slide h-100">
+						<div id="carouselExampleIndicators" class="carousel slide h-100">
+							<div class="carousel-inner h-100" id="photo">
+								@{
+									int count = 1;
+								}
+								@foreach (string photo in photosUser)
+								{
+									if (count == 1)
+									{
+										<div class="carousel-item h-100 active">
+											<img src="@photo" class="d-block w-100 user" alt="photo">
+										</div>
+									}
+									else
+									{
+										<div class="carousel-item h-100">
+											<img src="@photo" class="d-block w-100 user" alt="photo">
+										</div>
+									}
+									count++;
+								}
+							</div>
+							<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+								<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Previous</span>
+							</button>
+							<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+								<span class="carousel-control-next-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Next</span>
+							</button>
+						</div>
+						<div class="profile">
+							<div class="name">@UserSwipe.Name <span>@(
+								DateTime.Today.Year - UserSwipe.DateOfBirth?.Year
+								)</span></div>
+							<div class="local">
+								<i class="fas fa-map-marker-alt"></i>
+								<span>@UserSwipe.Description</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="buttons">
+					<div id="no" class="no" data-iduser="@UserSwipe.UserId" data-skip="@skip">
+						<i class="fas fa-times"></i>
+					</div>
+					<div id="star" class="star" data-iduser="@UserSwipe.UserId" data-skip="@skip">
+						<i class="fas fa-star fa"></i>
+					</div>
+					<div id="heart" class="heart" data-iduser="@UserSwipe.UserId" data-skip="@skip">
+						<i class="fas fa-heart"></i>
+					</div>
+				</div>
+			}
+			else
+			{
+				<div class="card">
+					<h3>You have swiped everyone!</h3>
+				</div>
+			}
+			<div>
+				<button style="position: absolute;right: 17vh;bottom: 0px;" class="btn p-0">
 
-                            <div class="carousel-indicators">
-                                @for (int i = 1; i <= photosUser.Count(); i++)
-                                {
-                                    if (i == 1)
-                                    {
-                                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="@i-1" class="active" aria-current="true" aria-label="Slide @i"></button>
-                                    }
-                                    else
-                                    {
-                                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="@i-1" aria-label="Slide @i"></button>
-                                    }
-                                }
-                            </div>
-                            <div class="carousel-inner h-100">
-                                @{
-                                    int count = 1;
-                                }
-                                @foreach (string photo in photosUser)
-                                {
-                                    if (count == 1)
-                                    {
-                                        <div class="carousel-item h-100 active">
-                                            <img src="@photo" class="d-block w-100 user" alt="photo">
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="carousel-item h-100">
-                                            <img src="@photo" class="d-block w-100 user" alt="photo">
-                                        </div>
-                                    }
-                                    count++;
-                                }
-                            </div>
-                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
-                        </div>
-                        <div class="profile">
-                            <div class="name">
-                                @UserSwipe.Name <span>
-                                    @(
-                                        DateTime.Today.Year - UserSwipe.DateOfBirth?.Year
-                                        )
-                                </span>
-                            </div>
-                            <div class="local">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>@UserSwipe.Description</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="buttons">
-                    <div class="no">
-                        <i class="fas fa-times"></i>
-                    </div>
-                    <div class="star">
-                        <i class="fas fa-star fa"></i>
-                    </div>
-                    <div class="heart">
-                        <i class="fas fa-heart"></i>
-                    </div>
-                </div>
-            }
-            else
-            {
-                <div class="card">
-                    <h3>You have swiped everyone!</h3>
-                </div>
-            }
-        </div>
+					<a href="/Messages/Index"><img src="~/images/talk.png" alt="chat" /></a>
+				</button>
 
-    </div>
+			</div>
+		</div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+		</div>
+		<script src="~/lib/jquery/dist/jquery.js"></script>
+		<script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+	
+		<script src="~/js/swipe.js" type="text/javascript"></script>
+	</body>
 </html>
